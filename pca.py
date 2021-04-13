@@ -52,15 +52,6 @@ scaler = StandardScaler()
 scaler.fit(X)
 
 scaled_X = scaler.transform(X)
-
-# %%
-pca = PCA(n_components=2)
-pca.fit(scaled_X)
-X_new = pca.transform(scaled_X)
-# %%
-print('Explained variation per principal component: {}'.format(pca.explained_variance_ratio_))
-print('Total explained variationt: {}'.format(np.sum(pca.explained_variance_ratio_)))
-
 # %%
 # How many components?
 pca_full = PCA().fit(scaled_X)
@@ -75,5 +66,48 @@ plt.axvline(1, c='b')
 plt.axhline(0.9, c='r')
 plt.grid()
 plt.show()
+# %%
+pca = PCA(n_components=2)
+pca.fit(scaled_X)
+X_new = pca.transform(scaled_X)
+# %%
+print('Explained variation per principal component: {}'.format(pca.explained_variance_ratio_))
+print('Total explained variationt: {}'.format(np.sum(pca.explained_variance_ratio_)))
+
+
 
 # %%
+principal_breast_Df = pd.DataFrame(data = X_new
+             , columns = ['principal component 1', 'principal component 2'])
+plt.figure()
+plt.figure(figsize=(10,10))
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=14)
+plt.xlabel('Principal Component - 1',fontsize=20)
+plt.ylabel('Principal Component - 2',fontsize=20)
+plt.title("Principal Component Analysis of Breast Cancer Dataset",fontsize=20)
+targets = ['Benign', 'Malignant']
+colors = ['r', 'g']
+for target, color in zip(targets,colors):
+    indicesToKeep = dataset['label'] == target
+    plt.scatter(principal_breast_Df.loc[indicesToKeep, 'principal component 1']
+               , principal_breast_Df.loc[indicesToKeep, 'principal component 2'], c = color, s = 50)
+
+plt.legend(targets,prop={'size': 15})
+# %%
+
+# Try plot again but simpler
+
+plt.figure()
+plt.figure(figsize=(10,10))
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=14)
+plt.xlabel('PC1',fontsize=20)
+plt.ylabel('PC2',fontsize=20)
+plt.title("PCA of Breast Cancer Dataset",fontsize=20)
+
+plt.scatter(X_new[:, 0], X_new[:, 1])
+# %%
+
+# Create a dataframe of PCA components together with labels
+pc_df = pd.DataFrame(data = X_new, columns )
